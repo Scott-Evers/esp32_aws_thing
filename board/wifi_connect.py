@@ -2,14 +2,19 @@ from network import WLAN
 from network import STA_IF
 import machine
 
-wlan = WLAN(STA_IF)
 
-wlan.active(True)
+class Wifi_Client:
 
-wlan.connect('','')
+    def __init__(self, ssid, passphrase):
 
-while not wlan.isconnected():
-    machine.idle()
+        wlan = WLAN(STA_IF)
 
-print('Wifi connected:', wlan.ifconfig())
+        wlan.active(True)
+
+        wlan.connect(ssid, passphrase)
+
+        while not wlan.isconnected():
+            machine.idle()
+
+        print('Wifi connected:', wlan.ifconfig())
 

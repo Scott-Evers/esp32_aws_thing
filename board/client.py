@@ -1,4 +1,5 @@
-import wifi_connect, time
+import time
+from wifi_connect import Wifi_Client
 from simple import MQTTClient
 from machine import Pin
 
@@ -20,6 +21,12 @@ CONFIG_FILE = "/flash/creds.json"
 # read configuration values from file
 with open(CONFIG_FILE, 'r') as f:
     config = json.loads(f.read())
+MQTT_CLIENT_ID = config['iot']['client_id']
+MQTT_PORT = 8883
+MQTT_TOPIC = config['iot']['topic_prefix'] + MQTT_CLIENT_ID
+MQTT_HOST = config['iot']['endpoint']
+WIFI_SSID = config['wifi']['ssid']
+WIFI_PP = config['wifi']['passphrase']
 
 
 
@@ -30,14 +37,9 @@ with open(config['iot']['key_file'],'r') as f:
     MQTT_KEY = f.read()
 
 
+# connect to WIFI
+wifi = Wifi_Client(WIFI_SSID, WIFI_PP)
 
-#if you change the ClientId make sure update AWS policy
-MQTT_CLIENT_ID = config['iot']['client_id']
-MQTT_PORT = 8883
-MQTT_TOPIC = config['iot']['topic_prefix'] + MQTT_CLIENT_ID
-MQTT_HOST = config['iot']['endpoint']
-WIFI_SSID = config['wifi']['ssid']
-WIFI_PW = config['wifi']['passphrase']
 
 mqtt_client = None
 
